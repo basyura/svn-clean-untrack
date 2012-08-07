@@ -1,0 +1,19 @@
+#!ruby
+
+require 'fileutils'
+
+`svn status`.each_line do |line|
+  line.chomp!
+
+  next if line =~ /#{__FILE__}/
+  next if line !~ /^?/
+
+  line.sub!(/^\?\s*/, '')
+
+  puts line
+  if File.directory?(line)
+    FileUtils.rm_r(line, {:force => true})
+  else
+    FileUtils.rm(line)
+  end
+end
